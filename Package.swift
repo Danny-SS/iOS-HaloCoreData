@@ -5,6 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "HaloCoreData",
+    platforms: [.iOS(.v13), .macOS(.v11)],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
@@ -20,9 +21,16 @@ let package = Package(
         // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "HaloCoreData",
-            dependencies: []),
+            dependencies: [],
+            resources: [
+                .process("Resources")
+            ]),
         .testTarget(
             name: "HaloCoreDataTests",
-            dependencies: ["HaloCoreData"]),
-    ]
+            dependencies: ["HaloCoreData"],
+            resources: [
+                .process("Resources")
+            ])
+    ],
+    swiftLanguageVersions: [.v5, .v4_2]
 )
