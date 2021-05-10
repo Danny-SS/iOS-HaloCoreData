@@ -33,15 +33,14 @@ jobs:
         restore-keys: |
             ${{ runner.os }}-xcode_${{ matrix.xcode }}-swiftpm-deps-${{ github.workspace }}
             
-    - name: Cache DerivedData
-      uses: actions/cache@v1
+    - name: SwiftPM tests
+      run: swift test --enable-code-coverage
+
+    - name: Convert coverage to lcov
+      run: xcrun llvm-cov export -format="lcov" .build/debug/PersistPackageTests.xctest/Contents/MacOS/PersistPackageTests -instr-profile .build/debug/codecov/default.profdata > coverage.lcov
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1
       with:
-        path: ~/Library/Developer/Xcode/DerivedData
-        key: ${{ runner.os }}-${{ matrix.platform }}_derived_data-xcode_${{ matrix.xcode }}
-        restore-keys: |
-            ${{ runner.os }}-${{ matrix.platform }}_derived_data
+        fail_ci_if_error: true
         
-    - name: Build
-      run: swift build -v
-    - name: Run tests
-      run: swift test -v
