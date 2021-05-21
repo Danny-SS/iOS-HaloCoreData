@@ -23,13 +23,13 @@ let package = Package(
             name: "HaloCoreData",
             dependencies: [],
             resources: [
-                .process("Resources")
+                .process("Resources"),
             ]),
         .testTarget(
             name: "HaloCoreDataTests",
             dependencies: ["HaloCoreData"],
             resources: [
-                .process("Resources")
+                .process("Resources"),
             ])
     ],
     swiftLanguageVersions: [.v5, .v4_2]

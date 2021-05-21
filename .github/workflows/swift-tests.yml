@@ -1,4 +1,5 @@
-name: Swift
+
+name: SwiftPM Test
 
 on:
   push:
@@ -11,8 +12,8 @@ jobs:
     env:
       PACKAGE_NAME: HaloCoreData
 
-    runs-on: macos-10.15
-    
+    runs-on: macos-latest
+
     strategy:
       fail-fast: false
       matrix:
@@ -21,12 +22,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    
-    - name: Setup Xcode version
+
+    - name: Setup Xcode Version - ${{ matrix.xcode }}
       uses: maxim-lobanov/setup-xcode@v1.2.3
-      with: 
+      with:
         xcode-version: '${{ matrix.xcode }}'
-        
+
     - name: Cache SwiftPM
       uses: actions/cache@v1
       with:
@@ -34,7 +35,7 @@ jobs:
         key: ${{ runner.os }}-xcode_${{ matrix.xcode }}-swiftpm-deps-${{ github.workspace }}-${{ hashFiles('Package.resolved') }}
         restore-keys: |
             ${{ runner.os }}-xcode_${{ matrix.xcode }}-swiftpm-deps-${{ github.workspace }}
-            
+
     - name: SwiftPM tests
       run: swift test --enable-code-coverage
 
@@ -44,5 +45,5 @@ jobs:
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v1
       with:
+        token: ${{ secrets.CODECOV_TOKEN }}
         fail_ci_if_error: true
-        
